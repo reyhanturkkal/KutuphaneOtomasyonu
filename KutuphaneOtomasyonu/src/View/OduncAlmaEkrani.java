@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author pelinustunel
  */
-public class OduncAlmaEkrani extends javax.swing.JDialog {
+public class OduncAlmaEkrani extends javax.swing.JDialog implements PersonelEkranOrtakIslemler{
 
     DefaultTableModel kitapModel;
     DefaultTableModel uyeModel;
