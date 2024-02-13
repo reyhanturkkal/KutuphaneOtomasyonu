@@ -96,6 +96,54 @@ Projenizin dosya yapısını açıklayan bir bölüm ekleyebilirsiniz. Örneğin
 - `README.md`
 - `LICENSE`
 
+## Projede Kullanılan Tasarım Desenleri
+
+### Singleton (Tekli)
+
+Tek bir nesne oluşturulmasını zorunlu kılar.
+
+**Uygulanan Dosyalar -** Database, KitapIslemleri
+
+Veritabanını tek bir kez nesnesini oluşturuyoruz.
+
+### Factory (Fabrika)
+
+Bir nesne oluşturmak için yalnızca bir arabirim veya soyut sınıf tanımladığını, ancak alt sınıfların hangi sınıfın başlatılacağına karar vermesine izin verir , nesnenin nerede yaratılacağı sorununu çözer.
+
+**Uygulanan Dosyalar -** GirisFactory, GirisEkranı, PersonelGiris, OgrenciGiris, OgretimElemaniGiris, TemelAnaGiris
+
+Personel, öğrenci, öğretim elemanı ve temel giriş olmak üzere dört giriş çeşidinden GirisFactory ile nesnesi oluşturuldu. Hepsinin ortak fonksiyonu olan setVisible GirisEkranında belirtildi.
+
+### Facade (Cephe)
+
+Alt sistemi daha kolay kullanmak için tek ve birleştirici bir arayüz sağlar. Dolayısıyla alt sistemler arasındaki bağımlılıkları da olabildiğince asgari seviyede tutar.Bir sınıfın nesnesini yaratmak için bir arayüz tanımlanır, fakat hangi sınıfın nesnesinin oluşturulacağına alt sınıflar karar verir. PersonelAraEkran kendi altında birçok karmaşık yapıyı barındırdığından kullanımı kolaylaştırmak için bu patern uygun görüldü.
+
+**Uygulanan Dosyalar -** PersonelAraEkran, PersonelAraEkranFacade, KitapEkrani, GeriTeslimEkrani, KullaniciEkrani, OduncAlmaEkrani, PersonelEkranOrtakIslemler
+
+PersonelAraEkran da kitap, geriteslim, kullanıcı ve ödüçalma ekranları ilgili butonlarda facade.get………(ilgili ekran ismi noktalı yere gelecek) metoduyla çağrıldı. PersonelAraEkranFacade dosyasında tüm bu ekranların nesnesi ve bu nesneleri çağıran get metodları oluşturuldu. PersonelEkranOrtakIslemler dosyasında kitap, geriTeslim, kullanici ve ödünç ekranlarında ortak olan geridön setvisible tanımlandı. Ve bu ekranlarda override edilerek içi dolduruldu.
+
+### Strategy (Strateji)
+
+Bir sınıf davranışı veya algoritması çalışma zamanında değiştirilebilir. Her kardeş sınıf ayrı bir algoritmayı
+yerine getirir. Hangi sınıfın kullanılacağına ise bir
+başka nesne, çoğunlukla bağlam nesnesi karar verir.
+
+**Uygulanan Dosyalar -** EkranIslemContext, EkranIslemStrategy, GeriTeslimEkrani, GeriTeslimIslemleri, KitapEkrani, KitapIslemleri, KullaniciEkrani, KullaniciIslemler, OduncAlmaEkrani, OduncIslemleri, OduncleriGorEkrani, OduncleriGorIslemleri, KitapYorumEkrani, YorumIslemleri, UyeOlEkrani, UyeIslemleri
+
+GeriTeslim, kitap, kitapİşlemleri, kullanıcı, ödünçAlma, ödünçGörme, kitapYorum ve üyeOl ekranlarında ortak bir işlem gerçekleştirilmekte. Veritabanından ilgili bilgiler getirilmektedir. EkranIslemStrategy sayfasında bu bilgileri getiren fonksiyon tanımlandı. İlgili ekranın ilgili işlem dosyasında bu fonksiyonun içi dolduruldu. EkranIslemContext dosyasında bu fonksiyonu execute eden yani çalıştıran bir fonksiyon daha tanımlandı. Bu fonksiyon EkranIslemStrategy sayfasındaki fonksiyon değiştiğinde veya fonksiyon ekleme çıkarma yapıldığında dinamik olarak tek bir yerden buna uyum sağlama kontrol etme özelliği sunar. Bu sayede, farklı stratejileri dinamik olarak değiştirme ve çalışma zamanında uygulamada farklı davranışlar sağlama esnekliği sağlanır.
+
+Son olarak da ilgili ekranda işlem oluşturulur, sonra EkranIslemContext nesnesine parametre olarak gönderilir. Ve ortak bilgi getiren fonksiyona yerleştirilir ve çalıştırma fonksiyonu da oluşturulmuş olur. Ardından da execute edilerek fonksiyon kullanılmış olur.
+
+### Command (Komut)
+
+Strategy, Command’in özel bir hali olarak görülebilir. İsteği yerine getiren metodun nesne olarak modellenmesidir.
+
+**Uygulanan Dosyalar -** ButonKomutlar, TemelAnaGiris, UyeOlKomut, GirisYapKomut, SistemeErisimCommand
+
+Sisteme kullanıcı iki yolla erişebilmekte giriş yaparak ya da üye olarak. Bu işlemleri ilgili butonlara tıklanınca gerçekleşiyor yani iki komut işleniyor. Önce bu komutları fonksiyonlarını ana bir ButonKomutlar dosyasında oluşturuyoruz ve görünürlüklerini belirleyen fonksiyonlarını da. Daha sonra bu komutları çalıştıracak bir execute fonksiyonunu SistemeErisimCommand sınıfında oluşturuyoruz. ButonKomutlar dosyasında oluşturduğumuz komutlar için bir de ilgili sınıflarını oluşturuyoruz, giris ve üye ol.
+
+Sonra da bu sınıflarda ilgili fonksiyonlarını çağıryor ve çalıştırılması için execute içinde yazıyoruz. Son olarak TemelAnaGiris sayfasında önce buton komutlarını ardıncan ilgili komutları oluşturup ilgili buton clicked’inin altında execute ederek çalıştırıp visible ile ilgili ekranı görünür kılıyoruz.
+
 ---
 
 ## Kurulum
